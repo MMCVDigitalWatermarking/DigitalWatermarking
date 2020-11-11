@@ -1,0 +1,6 @@
+libtorch==1.2.0.1
+numpy==1.19.4
+Pillow==8.0.1
+PySide2==5.15.1
+shiboken2==5.15.1
+tr==1.0.0.2
