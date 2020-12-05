@@ -23,8 +23,7 @@ class Form(QDialog):
         self.label_methods = QLabel("Available methods:")
         self.methodLSB_en_button = QPushButton("LSB encode")
         self.methodLSB_de_button = QPushButton("LSB decode")
-        self.methodLSB_en_button.setDisabled(True)
-        self.methodLSB_de_button.setDisabled(True)
+        self.disable_buttons(True)
         self.msg_label = QLabel("Message to code (optional)")
         self.msq_to_put = QLineEdit(self)
         self.msq_to_put.setText("secret")
@@ -54,28 +53,36 @@ class Form(QDialog):
 
     def load_picture(self):
         pixmap = QPixmap(self.file_name[0])
-        self.label_picture.setPixmap(pixmap)
+        if pixmap.width() > pixmap.height():
+            self.label_picture.setPixmap(pixmap.scaledToWidth(self.label_picture.width()))
+        else:
+            self.label_picture.setPixmap(pixmap.scaledToHeight(self.label_picture.height()))
+
 
     def open_file(self):
         self.file_name = QFileDialog.getOpenFileName(self,
                                                      "Open Image", "",
                                                      "Image Files (*.png *.jpg *.bmp)")
         self.load_picture()
-        self.methodLSB_en_button.setDisabled(False)
-        self.methodLSB_de_button.setDisabled(False)
+        self.disable_buttons(False)
+
 
     def method_LSB_encode(self):
+        self.disable_buttons(True)
         msg = self.msq_to_put.text()
         image = cv2.imread(self.file_name[0])
         watermarker = LSBWatermarker(image=image, mode='encode-message', message=msg, filename='result.png')
         self.file_name = ["result.png", ""]
         watermarker.run()
         self.load_picture()
+        self.disable_buttons(False)
 
     def method_LSB_decode(self):
+        self.disable_buttons(True)
         image = cv2.imread('result.png')
         watermarker = LSBWatermarker(image=image, mode='decode-message')
         watermarker.run()
+        self.disable_buttons(False)
         self.show_decoded_msg(watermarker.decoded_msg)
 
     def show_decoded_msg(self, msg):
@@ -83,6 +90,10 @@ class Form(QDialog):
         msgBox.setWindowTitle("Decoded message:")
         msgBox.setText(msg)
         msgBox.exec_()
+
+    def disable_buttons(self, disable):
+        self.methodLSB_en_button.setDisabled(disable)
+        self.methodLSB_de_button.setDisabled(disable)
 
 
 if __name__ == '__main__':
