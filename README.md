@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/MMCVDigitalWatermarking/DigitalWatermarking.svg?branch=main)](https://travis-ci.com/MMCVDigitalWatermarking/DigitalWatermarking)
 # Digital Watermarking
 ***
 ## 0. Setup
