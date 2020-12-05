@@ -1,6 +1,6 @@
 import sys
 from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import (QLineEdit, QPushButton, QApplication,
+from PySide2.QtWidgets import (QPushButton, QApplication,
                                QVBoxLayout, QDialog, QFileDialog, QLabel, QGridLayout)
 
 
