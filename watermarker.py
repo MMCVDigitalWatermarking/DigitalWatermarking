@@ -17,7 +17,6 @@ class Watermarker():
 
 
 class LSBWatermarker(Watermarker):
-
     MESSAGE_DELIMITER = "$MMCV$"
 
     def __init__(self, image, mode, message=None, picture=None, filename=None):
@@ -26,6 +25,7 @@ class LSBWatermarker(Watermarker):
         self.message = message
         self.picture = picture
         self.filename = filename
+        self.decoded_msg = ""
 
     def run(self):
         if self.mode == 'encode-message' and self.message and self.filename:
@@ -95,8 +95,9 @@ class LSBWatermarker(Watermarker):
             for row_column in rows:
                 rgb_array = self.get_binary_array(row_column)
                 binary_data += self.get_data_from_lsb(rgb_array)
-        message_bytes = [binary_data[i: i+8] for i in range(0, len(binary_data), 8)]
+        message_bytes = [binary_data[i: i + 8] for i in range(0, len(binary_data), 8)]
         message = self.decode_bytes(message_bytes)
+        self.decoded_msg = message
         print("Decoded message is: '{}'".format(message))
 
     def encode_picture(self, picture):
