@@ -22,3 +22,18 @@ $ pip install -r requirements.txt
 Decoded message is: 'secret'
 ```
 ***
+## 2. DCTWatermarker
+#### 2.1 basic usage - images
+
+
+```
+>>> from Watermark_DCT import WatermarkDCT
+>>> dct_wm = WatermarkDCT('media/test.png', num_of_co=1000, alpha=0.1)
+>>> dct_wm.encode_watermark()
+>>> print('is the input image our watermarked image?: ' + str(dct_wm.detect_watermark()))
+>>> print('is the input image our watermarked image?: ' + str(dct_wm.detect_watermark('media/landscape.png')))
+>>> dct_wm.show_watermark_results()
+>>> dct_wm.decode_watermark()
+>>> dct_wm.show_watermark_results()
+```
+
