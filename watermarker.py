@@ -76,8 +76,8 @@ class LSBWatermarker(Watermarker):
         for byte in message_bytes:
             message += chr(int(byte, 2))
             if message[-6:] == self.MESSAGE_DELIMITER:
-                break
-        return message[:-6]
+                return message[:-6]
+        return -1
 
     def encode_message(self, message):
         if len(message) > self.get_max_bytes_to_encode():
@@ -97,8 +97,11 @@ class LSBWatermarker(Watermarker):
                 binary_data += self.get_data_from_lsb(rgb_array)
         message_bytes = [binary_data[i: i + 8] for i in range(0, len(binary_data), 8)]
         message = self.decode_bytes(message_bytes)
-        self.decoded_msg = message
-        print("Decoded message is: '{}'".format(message))
+        if message != -1:
+            self.decoded_msg = message
+            print("Decoded message is: '{}'".format(message))
+        else:
+            self.decoded_message = "Provided file has no message encoded!"
 
     def encode_picture(self, picture):
         pass
