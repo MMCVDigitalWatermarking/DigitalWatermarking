@@ -72,11 +72,11 @@ class WatermarkDCT:
         dct_vec = dct_img.flatten()
         wm_dct_coeff = dct_vec[self.coeff_ids]
 
-        try:
-            wm_encoded = self.calculate_inverse_dct_watermark(self.orig_dct_coeff, wm_dct_coeff)
-            wm_sim = self.calculate_vec_similarity(wm_encoded, self.wm_vec)
-        except ValueError:
-            raise Exception('Unable to calculate watermark vector similarity.')
+        wm_encoded = self.calculate_inverse_dct_watermark(self.orig_dct_coeff, wm_dct_coeff)
+        if not wm_encoded.any():
+            return False  # This is the case of trying to detect the watermark on the original image
+        wm_sim = self.calculate_vec_similarity(wm_encoded, self.wm_vec)
+
         self.wm_sim = wm_sim
         return wm_sim > threshold
 
@@ -97,7 +97,11 @@ class WatermarkDCT:
         return self.orig_dct_coeff * (1 + self.alpha * self.wm_vec)
 
     def calculate_inverse_dct_watermark(self, original_dct_coeff, wm_dct_coeff):
-        return ((wm_dct_coeff / original_dct_coeff) - 1) / self.alpha
+        try:
+            inv_dct_watermark = ((wm_dct_coeff / original_dct_coeff) - 1) / self.alpha
+        except Exception:
+            raise Exception('Couln\'t calculate the inverse dct watermark')
+        return inv_dct_watermark
 
     @staticmethod
     def calculate_vec_similarity(vec1, vec2):
