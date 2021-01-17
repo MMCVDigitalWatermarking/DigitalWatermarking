@@ -5,7 +5,6 @@ from PySide2 import QtWidgets
 from PySide2.QtCore import QThreadPool, QCoreApplication, QRect, QMetaObject
 
 from WatermarkDCT import WatermarkDCT
-from gui_fns import *
 from watermarker import LSBWatermarker
 from worker import Worker
 from PySide2.QtGui import QPixmap
@@ -24,6 +23,7 @@ class Ui_MainWindow(object):
         self.threadpool = QThreadPool()
         self.num_of_co = 1000
         self.alpha = 0.1
+        self.watermarker = None
 
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
@@ -212,7 +212,10 @@ class Ui_MainWindow(object):
         self.disable_Methods(False)
         progress_callback.emit(90)
         # self.show_decoded_msg(watermarker.decoded_msg)
-        self.LSB_msg.setText("Decoded: " + watermarker.decoded_msg)
+        if watermarker.decoded_msg == "Provided file has no message encoded!":
+            self.LSB_msg.setText(watermarker.decoded_msg)
+        else:
+            self.LSB_msg.setText("Decoded: " + watermarker.decoded_msg)
         progress_callback.emit(100)
 
     def method_DCT_encode(self, progress_callback):
@@ -222,15 +225,18 @@ class Ui_MainWindow(object):
         try:
             self.num_of_co = int(msg[0])
             self.alpha = float(msg[1])
-            watermarker = WatermarkDCT(self.file_name[0], num_of_co=self.num_of_co, alpha=self.alpha)
+            self.watermarker = WatermarkDCT(self.file_name[0], num_of_co=self.num_of_co, alpha=self.alpha)
             progress_callback.emit(50)
-            watermarker.encode_watermark()
-            self.DCT_masg.setText("Picture is watermarked?:" + str(watermarker.detect_watermark()))
+            self.watermarker.encode_watermark()
+            self.file_name = ["result_DCT.png", ""]
+            self.DCT_masg.setText("Picture is watermarked?:" + str(self.watermarker.detect_watermark(self.file_name[0])))
+
         except Exception as e:
             print(e)
             self.DCT_masg.setText("Error: wrong parameters: example 1000, 0.1")
         finally:
             progress_callback.emit(90)
+
             self.load_picture()
             self.disable_Methods(False)
             progress_callback.emit(100)
@@ -239,9 +245,10 @@ class Ui_MainWindow(object):
         self.disable_Methods(True)
         progress_callback.emit(10)
         try:
-            watermarker = WatermarkDCT(self.file_name[0], num_of_co=self.num_of_co, alpha=self.alpha)
+            if self.watermarker is None:
+                self.watermarker = WatermarkDCT(self.file_name[0], num_of_co=self.num_of_co, alpha=self.alpha)
             progress_callback.emit(50)
-            self.DCT_masg.setText("Picture is watermarked?:" + str(watermarker.detect_watermark(self.file_name[0])))
+            self.DCT_masg.setText("Picture is watermarked?:" + str(self.watermarker.detect_watermark(self.file_name[0])))
         except Exception as e:
             print(e)
             self.DCT_masg.setText("Error: Unable to check the picture.")
