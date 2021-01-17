@@ -101,7 +101,7 @@ class LSBWatermarker(Watermarker):
             self.decoded_msg = message
             print("Decoded message is: '{}'".format(message))
         else:
-            self.decoded_message = "Provided file has no message encoded!"
+            self.decoded_msg = "Provided file has no message encoded!"
 
     def encode_picture(self, picture):
         pass

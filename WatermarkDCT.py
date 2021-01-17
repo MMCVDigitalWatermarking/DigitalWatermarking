@@ -60,6 +60,7 @@ class WatermarkDCT:
         dct_wm = np.reshape(dct_vec, dct_img.shape)
 
         self.watermarked_img = self.calculate_inverse_dct(dct_wm)
+        self.save_img("result_DCT.png", self.watermarked_img)
 
     def detect_watermark(self, target_img_path=None, threshold=10):
         if target_img_path is None:
@@ -122,3 +123,4 @@ class WatermarkDCT:
     def calculate_inverse_dct(img):
         img = np.float32(img)
         return cv2.dct(img, flags=cv2.DCT_INVERSE)
+
