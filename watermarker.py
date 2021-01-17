@@ -99,7 +99,7 @@ class LSBWatermarker(Watermarker):
         message = self.decode_bytes(message_bytes)
         if message != -1:
             self.decoded_msg = message
-            print("Decoded message is: '{}'".format(message))
+            # print("Decoded message is: '{}'".format(message))
         else:
             self.decoded_msg = "Provided file has no message encoded!"
 
