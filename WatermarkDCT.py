@@ -8,10 +8,17 @@ class WatermarkDCT:
         self.watermarked_img = None
         self.num_of_co = num_of_co
         self.alpha = alpha
-        self.wm_vec = np.array([])
-        self.coeff_ids = np.array([])
-        self.orig_dct_coeff = np.array([])
         self.wm_sim = None
+
+        dct_img = self.calculate_dct(self.orig_img)
+        dct_img = np.array(dct_img)
+
+        dct_vec = dct_img.flatten()
+        self.coeff_ids = np.flip(np.argsort(np.absolute(dct_vec)))
+        self.coeff_ids = self.coeff_ids[1:self.num_of_co + 1]
+        self.orig_dct_coeff = dct_vec[self.coeff_ids]
+
+        self.wm_vec = self.create_n_normal_values(self.num_of_co)
 
     @staticmethod
     def load_img(orig_img_path, color_mode=0):
@@ -60,7 +67,6 @@ class WatermarkDCT:
         dct_wm = np.reshape(dct_vec, dct_img.shape)
 
         self.watermarked_img = self.calculate_inverse_dct(dct_wm)
-        self.save_img("result_DCT.png", self.watermarked_img)
 
     def detect_watermark(self, target_img_path=None, threshold=10):
         if target_img_path is None:
@@ -79,7 +85,7 @@ class WatermarkDCT:
         wm_sim = self.calculate_vec_similarity(wm_encoded, self.wm_vec)
 
         self.wm_sim = wm_sim
-        return wm_sim > threshold
+        return bool(wm_sim > threshold)
 
     def decode_watermark(self, target_img_path=None):
         if target_img_path is None:
@@ -123,4 +129,3 @@ class WatermarkDCT:
     def calculate_inverse_dct(img):
         img = np.float32(img)
         return cv2.dct(img, flags=cv2.DCT_INVERSE)
-

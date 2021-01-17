@@ -229,7 +229,7 @@ class Ui_MainWindow(object):
             progress_callback.emit(50)
             self.watermarker.encode_watermark()
             self.file_name = ["result_DCT.png", ""]
-            self.DCT_masg.setText("Picture is watermarked?:" + str(self.watermarker.detect_watermark(self.file_name[0])))
+            self.DCT_masg.setText("Picture is watermarked?:" + str(self.watermarker.detect_watermark()))
 
         except Exception as e:
             print(e)
