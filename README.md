@@ -8,32 +8,28 @@ $ source env/bin/activate
 $ pip install -r requirements.txt
 ```
 ***
-## 1. LSBWatermarker
-#### 1.1 basic usage - text messages
+## 1. Quickstart
+To run application, type
 ```
->>> from watermarker import LSBWatermarker
->>> import cv2
->>> image = cv2.imread('media/test.png')
->>> watermarker = LSBWatermarker(image=image, mode='encode-message', message='secret', filename='result.png')
->>> watermarker.run()
->>> image = cv2.imread('result.png')
->>> watermarker = LSBWatermarker(image=image, mode='decode-message')
->>> watermarker.run()
-Decoded message is: 'secret'
+python main.py
 ```
-***
-## 2. DCTWatermarker
-#### 2.1 basic usage - images
-
-
-```
->>> from Watermark_DCT import WatermarkDCT
->>> dct_wm = WatermarkDCT('media/test.png', num_of_co=1000, alpha=0.1)
->>> dct_wm.encode_watermark()
->>> print('is the input image our watermarked image?: ' + str(dct_wm.detect_watermark()))
->>> print('is the input image our watermarked image?: ' + str(dct_wm.detect_watermark('media/landscape.png')))
->>> dct_wm.show_watermark_results()
->>> dct_wm.decode_watermark()
->>> dct_wm.show_watermark_results()
-```
-
+Application will be opened in new window.
+![title](doc/app.png)
+### LSB encoding
+1. select image to be watermarked
+2. pass secret message to be encoded
+3. pick LSB encode
+4. by default, result will be saved as `result.png` in working directory
+### LSB decoding
+1. select image to decode hidden message
+2. pick LSB decode
+3. in case of image watermarked by LSB method, secret message will be displayed
+### DCT encoding
+1. select image to be watermarked
+2. pass DCT coefficients (in X, Y format, where X regulates change in DCT coefficients and Y represents number of coefficients to be changed)
+3. pick DCT encode
+4. by default, result will be saved as `result_DCT.png` in working directory
+### DCT decoding
+1. select image to be checked for watermark presence
+2. pick DCT decode
+3. application will display the information, if image was watermarked by DCT method
