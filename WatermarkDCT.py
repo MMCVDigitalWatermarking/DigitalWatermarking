@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 
 
 class WatermarkDCT:
@@ -53,6 +54,7 @@ class WatermarkDCT:
             print('No image is loaded. Please choose a valid path.')
 
     def encode_watermark(self):
+        self.orig_img = cv2.resize(self.orig_img, (1800, 1200))
         dct_img = self.calculate_dct(self.orig_img)
         dct_img = np.array(dct_img)
 
@@ -67,13 +69,14 @@ class WatermarkDCT:
         dct_wm = np.reshape(dct_vec, dct_img.shape)
 
         self.watermarked_img = self.calculate_inverse_dct(dct_wm)
+        self.save_img('result_DCT.png', self.watermarked_img)
 
     def detect_watermark(self, target_img_path=None, threshold=10):
         if target_img_path is None:
             target_img = self.watermarked_img
         else:
             target_img = self.load_img(target_img_path)
-
+        target_img = cv2.resize(target_img, (1800, 1200))
         dct_img = self.calculate_dct(target_img)
         dct_img = np.array(dct_img)
         dct_vec = dct_img.flatten()
