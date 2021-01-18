@@ -176,8 +176,6 @@ class PerformanceLSB():
         result = watermarker.decoded_msg == self.msg
         self.printResult("jpg_conversion_and_back_to_png", result)
 
-
-
     def printResult(self, fn_name, result):
         pass_fail = "FAIL"
         if result:
@@ -199,6 +197,7 @@ class PerformanceLSB():
         self.salt_and_peper()
         self.jpg_conversion()
         self.jpg_conversion_and_back_to_png()
+
 
 if __name__ == "__main__":
     PerformanceLSB().runAllTests()

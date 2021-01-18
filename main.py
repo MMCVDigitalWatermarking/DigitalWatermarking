@@ -13,8 +13,6 @@ from PySide2.QtWidgets import (QLineEdit, QPushButton, QApplication,
                                QVBoxLayout, QDialog, QFileDialog, QLabel, QGridLayout, QMessageBox, QMainWindow,
                                QHBoxLayout, QStatusBar, QMenuBar, QProgressBar, QWidget)
 
-import sys
-
 
 class Ui_MainWindow(object):
 
